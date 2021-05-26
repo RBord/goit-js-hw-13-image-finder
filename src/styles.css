@@ -18,3 +18,9 @@ body {
    */
   background-image: url('./images/bg-pattern.png');
 }
+
+.photo-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-gap: 15px;
+}
