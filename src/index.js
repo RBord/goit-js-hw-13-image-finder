@@ -29,11 +29,6 @@ function onSearch(e) {
 
 function onLoadMore() {
     imageApiService.fetchImages().then(appendImagesMarkup)
-
-    window.scrollTo({
-        top: refs.loadMoreImg.scrollHeight,
-        behavior: 'smooth',
-    })
 }
 
 function appendImagesMarkup(response) {
