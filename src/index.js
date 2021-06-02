@@ -8,7 +8,7 @@ const refs = {
     searchForm: document.getElementById('search-form'),
     imageListRoot: document.querySelector('ul'),
     // loadMoreImg: document.querySelector('[data-action="load-more"]'),
-    sentinel: document.getElementById('sentinel'),
+    sentinel: document.querySelector('.sentinel'),
 }
 
 refs.searchForm.addEventListener('submit', onSearch)
@@ -63,14 +63,13 @@ const onEntry = entries => {
         if (entry.isIntersecting && imageApiService.query !== '') {
             console.log('Грузим дальше')
             imageApiService.fetchImages().then(appendImagesMarkup)
-        }
-    })
-}
+        };
+    });
+};
 const options = {
-    threshold: 1,
-    root: document,
-    rootMargin: '200px',
-}
-const observer = new IntersectionObserver(onEntry, options)
+    threshold: 1.0,
+    rootMargin: '0px',
+};
+const observer = new IntersectionObserver(onEntry, options);
 
 observer.observe(refs.sentinel);
