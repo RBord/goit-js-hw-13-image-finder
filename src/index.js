@@ -7,11 +7,12 @@ const imageApiService = new ImageApiService();
 const refs = {
     searchForm: document.getElementById('search-form'),
     imageListRoot: document.querySelector('ul'),
-    loadMoreImg: document.querySelector('[data-action="load-more"]'),
+    // loadMoreImg: document.querySelector('[data-action="load-more"]'),
+    sentinel: document.getElementById('sentinel'),
 }
 
 refs.searchForm.addEventListener('submit', onSearch)
-refs.loadMoreImg.addEventListener('click', onLoadMore)
+// refs.loadMoreImg.addEventListener('click', onLoadMore)
 
 function onSearch(e) {
     e.preventDefault();
@@ -27,15 +28,14 @@ function onSearch(e) {
     imageApiService.fetchImages().then(appendImagesMarkup)
 }
 
-async function onLoadMore() {
-    try {
-       await imageApiService.fetchImages().then(appendImagesMarkup)
-    } catch {
-        console.error();
-    }
-
-    onScroll();
-}
+// async function onLoadMore() {
+//     try {
+//        await imageApiService.fetchImages().then(appendImagesMarkup)
+//     } catch {
+//         console.error();
+//     }
+//     onScroll();
+// }
 
 function appendImagesMarkup(response) {
     const markup = imageCardTpl(response);
@@ -46,17 +46,31 @@ function clearImagesList() {
     refs.imageListRoot.innerHTML = '';
 }
 
-function onScroll() {
-    // refs.loadMoreImg.scrollIntoView({
-    //     behavior: 'smooth',
-    //     block: 'end',
-    // });
+// function onScroll() {
+//     // refs.loadMoreImg.scrollIntoView({
+//     //     behavior: 'smooth',
+//     //     block: 'end',
+//     // });
 
-    window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth',
+//     window.scrollTo({
+//         top: document.documentElement.scrollHeight,
+//         behavior: 'smooth',
+//     })
+// }
+
+const onEntry = entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && imageApiService.query !== '') {
+            console.log('Грузим дальше')
+            imageApiService.fetchImages().then(appendImagesMarkup)
+        }
     })
 }
+const options = {
+    threshold: 1,
+    root: document,
+    rootMargin: '200px',
+}
+const observer = new IntersectionObserver(onEntry, options)
 
-
-
+observer.observe(refs.sentinel);
